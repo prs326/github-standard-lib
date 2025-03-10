@@ -1,0 +1,84 @@
+name: .NET Build Workflow
+on:
+  workflow_call:
+    inputs:
+      project_path:
+        required: true
+        type: string
+      build_output:
+        required: true
+        type: string
+      artifact_name:
+        required: true
+        type: string
+      storage_type:
+        required: false
+        type: string
+      storage_path:
+        required: false
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yaml
+    with: 
+      project_path: ${{ inputs.project_path }}
+      build_output: ${{ inputs.build_output }}
+      artifact_name: ${{ inputs.artifact_name }}
+      storage_type: ${{ inputs.storage_type }}
+      storage_path: ${{ inputs.storage_path }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    
+    #runs-on: windows-latest
+    #steps:
+        # Step 0: Call the validate workflow (inputs validation)
+     # - name: Validate Inputs
+      #  uses: ./.github/workflows/validate.yaml
+       # with: {}  # No need to re-define inputs, they are automatically passed
+
+      # # Step 1: Checkout ci-automation repository (for scripts & workflows)
+      # - name: Checkout CI Automation Repository
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: your-org/ci-automation
+      #     ref: main
+      #     path: ci-automation
+      #     token: ${{ secrets.GH_TOKEN }}
+
+      # # Step 2: Checkout main-repo repository (for actual source code)
+      # - name: Checkout Main Repository Code
+      #   uses: actions/checkout@v3
+      #   with:
+      #     repository: your-org/main-repo
+      #     ref: ${{ github.ref }}
+      #     path: main-repo
+      #     token: ${{ secrets.GH_TOKEN }}
+
+      # # Step 3: Set up .NET Core
+      # - name: Set up .NET Core
+      #   uses: actions/setup-dotnet@v3
+      #   with:
+      #     dotnet-version: '8.0'
+
+      # # Step 4: Restore Dependencies
+      # - name: Restore Dependencies
+      #   run: dotnet restore main-repo/${{ inputs.project_path }}
+
+      # # Step 5: Build Application
+      # - name: Build Application
+      #   run: dotnet build main-repo/${{ inputs.project_path }} --configuration Release --no-restore
+
+      # # Step 6: Publish Application
+      # - name: Publish Application
+      #   run: dotnet publish main-repo/${{ inputs.project_path }} --configuration Release --output main-repo/${{ inputs.build_output }}
+
+      # # Step 7: Store in NAS Drive (if required)
+      # - name: Store in NAS Drive (if required)
+      #   if: inputs.storage_type == 'NAS'
+      #   run: |
+      #     ./ci-automation/copy-to-nas.ps1 "${{ inputs.build_output }}" "${{ inputs.storage_path }}"
+      #   shell: powershell

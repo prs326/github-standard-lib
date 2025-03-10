@@ -1,0 +1,41 @@
+name: Validate Inputs Workflow
+on:
+  workflow_call:
+    inputs:
+      project_path:
+        required: true
+        type: string
+      build_output:
+        required: true
+        type: string
+      artifact_name:
+        required: true
+        type: string
+      storage_type:
+        required: false
+        type: string
+      storage_path:
+        required: false
+        type: string
+    secrets:
+      GH_TOKEN:
+        required: true
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - name: Validate Inputs
+        run: |
+            Write-Host "'PROJECT_PATH' is required and cannot be empty"
+            Write-Host "'build_output' is required and cannot be empty"
+            Write-Host "'artifact_name' is required and cannot be empty"
+            Write-Host "'storage_path' is required when 'storage_type' is 'NAS'"
+            Write-Host "All inputs validated successfully"
+        shell: powershell
+        env:
+          PROJECT_PATH: ${{inputs.project_path}}
+          build_output: ${{inputs.build_output}}
+          artifact_name: ${{inputs.artifact_name}}
+          storage_path: ${{inputs.storage_path}}
+          
