@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  call-dotnetbuild:
     uses: ./.github/workflows/dotnetbuild.yaml
     with:
       project_path: "./MyProject.sln"
