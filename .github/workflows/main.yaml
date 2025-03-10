@@ -15,4 +15,4 @@ jobs:
       storage_type: "NAS"
       storage_path: "E:\\Artifactory"  # Only needed if storage_type is 'NAS'
     secrets:
-      GH_TOKEN: "ATBBkRBUv63b7S8SXhZ3Yj6heSNS0DCDF317"
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
